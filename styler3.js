@@ -86,7 +86,7 @@
   // FIX: Using jsDelivr for the SVG so the browser recognizes it as an image
   window.init0GBranding = function(theme) {
     const logos = document.querySelectorAll('img.0g-logo');
-    const logoSrc = 'https://cdn.jsdelivr.net/gh/RedRavenLabs/OGLabsCannes@main/0G-Logo-Purple_Hero.svg';
+    const logoSrc = 'https://github.com/RedRavenLabs/OGLabsCannes/blob/main/0G-Logo-Purple_Hero.png?raw=true';
     
     logos.forEach(logo => {
       logo.src = logoSrc;
