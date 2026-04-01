@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0G Wallet - Styler7 Test</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/RedRavenLabs/OGLabsCannes@main/styler7.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .wallet {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Top bar */
+        .wallet-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .wallet-topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .wallet-address {
+            font-family: var(--font-code, 'Geist Mono', monospace);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            background: var(--bg-base);
+            padding: 6px 12px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-pressed);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .wallet-address:hover { color: var(--color-primary); }
+        .network-pill {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        /* Balance card */
+        .balance-card {
+            text-align: center;
+            padding: 32px 24px;
+        }
+        .balance-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .balance-amount {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.1;
+        }
+        .balance-amount span {
+            font-size: 1.2rem;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        .balance-usd {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        .balance-change {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #22c55e;
+            margin-top: 4px;
+        }
+
+        /* Action buttons */
+        .wallet-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-base);
+            border: none;
+            border-radius: 16px;
+            padding: 16px 8px;
+            box-shadow: var(--shadow-flat);
+            cursor: pointer;
+            transition: box-shadow 0.2s ease, background-color 0.3s ease;
+            font-family: var(--font-primary, sans-serif);
+        }
+        .action-btn:active { box-shadow: var(--shadow-pressed); }
+        .action-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            background: rgba(146, 0, 225, 0.1);
+        }
+        .action-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* Token list */
+        .token-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0;
+        }
+        .section-link {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .token-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-base);
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: var(--shadow-flat);
+            transition: background-color 0.3s ease;
+        }
+        .token-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .token-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .token-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .token-fullname {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .token-right {
+            text-align: right;
+        }
+        .token-balance {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .token-value {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Activity */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-base);
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: var(--shadow-flat);
+            transition: background-color 0.3s ease;
+        }
+        .activity-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .activity-icon.received { background: rgba(34, 197, 94, 0.12); }
+        .activity-icon.sent { background: rgba(239, 68, 68, 0.1); }
+        .activity-icon.swap { background: rgba(146, 0, 225, 0.1); }
+        .activity-icon.stake { background: rgba(245, 158, 11, 0.1); }
+
+        .activity-type {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-main);
+        }
+        .activity-detail {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .activity-right {
+            text-align: right;
+        }
+        .activity-amount {
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .activity-amount.positive { color: #22c55e; }
+        .activity-amount.negative { color: #ef4444; }
+        .activity-time {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 440px) {
+            .wallet-actions { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toggle-container">
+        <button id="theme-toggle-btn" onclick="toggleTheme()" style="font-size: 0.8rem; padding: 8px 16px;">🌙 Dark</button>
+    </div>
+
+    <div class="wallet">
+
+        <!-- Top bar -->
+        <div class="wallet-topbar">
+            <div class="wallet-topbar-left">
+                <img class="og-logo" alt="0G" style="height: 28px;" />
+                <span class="network-pill">0G Mainnet</span>
+            </div>
+            <div class="wallet-address" title="Click to copy">0x7a3B...f92E</div>
+        </div>
+
+        <!-- Balance -->
+        <div class="zg-card balance-card">
+            <div class="balance-label">Total Balance</div>
+            <div class="balance-amount">8,412.50 <span>0G</span></div>
+            <div class="balance-usd">≈ $14,301.25 USD</div>
+            <div class="balance-change">↑ +3.42% today</div>
+        </div>
+
+        <!-- Actions -->
+        <div class="wallet-actions">
+            <div class="action-btn">
+                <div class="action-icon">↑</div>
+                <div class="action-label">Send</div>
+            </div>
+            <div class="action-btn">
+                <div class="action-icon">↓</div>
+                <div class="action-label">Receive</div>
+            </div>
+            <div class="action-btn">
+                <div class="action-icon">⇄</div>
+                <div class="action-label">Swap</div>
+            </div>
+            <div class="action-btn">
+                <div class="action-icon">◆</div>
+                <div class="action-label">Stake</div>
+            </div>
+        </div>
+
+        <!-- Tokens -->
+        <div>
+            <div class="section-header">
+                <p class="section-title">Tokens</p>
+                <span class="section-link">Manage →</span>
+            </div>
+            <div class="token-list">
+                <div class="token-row">
+                    <div class="token-left">
+                        <div class="token-icon" style="background: #9200E1;">0G</div>
+                        <div>
+                            <div class="token-name">0G</div>
+                            <div class="token-fullname">0G Token</div>
+                        </div>
+                    </div>
+                    <div class="token-right">
+                        <div class="token-balance">8,012.50</div>
+                        <div class="token-value">$13,621.25</div>
+                    </div>
+                </div>
+                <div class="token-row">
+                    <div class="token-left">
+                        <div class="token-icon" style="background: #627EEA;">ETH</div>
+                        <div>
+                            <div class="token-name">ETH</div>
+                            <div class="token-fullname">Ethereum</div>
+                        </div>
+                    </div>
+                    <div class="token-right">
+                        <div class="token-balance">0.125</div>
+                        <div class="token-value">$412.50</div>
+                    </div>
+                </div>
+                <div class="token-row">
+                    <div class="token-left">
+                        <div class="token-icon" style="background: #2775CA;">USDC</div>
+                        <div>
+                            <div class="token-name">USDC</div>
+                            <div class="token-fullname">USD Coin</div>
+                        </div>
+                    </div>
+                    <div class="token-right">
+                        <div class="token-balance">267.50</div>
+                        <div class="token-value">$267.50</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity -->
+        <div>
+            <div class="section-header">
+                <p class="section-title">Activity</p>
+                <span class="section-link">View all →</span>
+            </div>
+            <div class="token-list">
+                <div class="activity-item">
+                    <div class="activity-left">
+                        <div class="activity-icon received">↓</div>
+                        <div>
+                            <div class="activity-type">Received</div>
+                            <div class="activity-detail">From 0x4f2a...d817</div>
+                        </div>
+                    </div>
+                    <div class="activity-right">
+                        <div class="activity-amount positive">+250.00 0G</div>
+                        <div class="activity-time">5 min ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-left">
+                        <div class="activity-icon swap">⇄</div>
+                        <div>
+                            <div class="activity-type">Swap</div>
+                            <div class="activity-detail">0G → USDC</div>
+                        </div>
+                    </div>
+                    <div class="activity-right">
+                        <div class="activity-amount negative">−100.00 0G</div>
+                        <div class="activity-time">32 min ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-left">
+                        <div class="activity-icon stake">◆</div>
+                        <div>
+                            <div class="activity-type">Stake Reward</div>
+                            <div class="activity-detail">Epoch 146 reward</div>
+                        </div>
+                    </div>
+                    <div class="activity-right">
+                        <div class="activity-amount positive">+18.40 0G</div>
+                        <div class="activity-time">2 hrs ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-left">
+                        <div class="activity-icon sent">↑</div>
+                        <div>
+                            <div class="activity-type">Sent</div>
+                            <div class="activity-detail">To 0xc83e...1af5</div>
+                        </div>
+                    </div>
+                    <div class="activity-right">
+                        <div class="activity-amount negative">−500.00 0G</div>
+                        <div class="activity-time">5 hrs ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-left">
+                        <div class="activity-icon received">↓</div>
+                        <div>
+                            <div class="activity-type">Received</div>
+                            <div class="activity-detail">From 0x91ba...e3c7</div>
+                        </div>
+                    </div>
+                    <div class="activity-right">
+                        <div class="activity-amount positive">+1,200.00 0G</div>
+                        <div class="activity-time">1 day ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById('theme-toggle-btn');
+
+            let currentTheme = html.getAttribute('data-0g-theme');
+            if (!currentTheme) {
+                currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-0g-theme', newTheme);
+            btn.innerText = newTheme === 'light' ? '🌙 Dark' : '☀️ Light';
+        }
+    </script>
+
+</body>
+</html>

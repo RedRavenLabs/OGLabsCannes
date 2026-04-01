@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0G Node Dashboard - Styler7 Test</title>
+
+    <script src="https://cdn.jsdelivr.net/gh/RedRavenLabs/OGLabsCannes@main/styler7.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+            max-width: 720px;
+        }
+
+        /* Header */
+        .dash-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .dash-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #22c55e;
+            background: var(--bg-base);
+            border-radius: 20px;
+            padding: 6px 14px;
+            box-shadow: var(--shadow-flat);
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Stat cards row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .stat-card {
+            background: var(--bg-base);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-flat);
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Transactions table */
+        .tx-table-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+            font-size: 0.85rem;
+        }
+        thead th {
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0 12px 8px 12px;
+        }
+        tbody tr {
+            background: var(--bg-base);
+            box-shadow: var(--shadow-flat);
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+        tbody td {
+            padding: 14px 12px;
+        }
+        tbody tr td:first-child { border-radius: 12px 0 0 12px; }
+        tbody tr td:last-child { border-radius: 0 12px 12px 0; }
+
+        .tx-hash {
+            font-family: var(--font-code, 'Geist Mono', monospace);
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 0.82rem;
+        }
+        .tx-type {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .tx-type.inference {
+            color: #9200E1;
+            background: rgba(146, 0, 225, 0.1);
+        }
+        .tx-type.stake {
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+        .tx-type.reward {
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .tx-amount {
+            font-weight: 700;
+            text-align: right;
+        }
+        .tx-amount.positive { color: #22c55e; }
+        .tx-amount.negative { color: var(--text-muted); }
+
+        .tx-time {
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+
+        /* Section titles */
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        /* Action buttons row */
+        .actions-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .actions-row button {
+            font-size: 0.85rem;
+            padding: 14px 12px;
+            width: 100%;
+        }
+
+        /* Network bar */
+        .network-bar {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            padding: 16px 20px;
+            background: var(--bg-base);
+            border-radius: 16px;
+            box-shadow: var(--shadow-pressed);
+            transition: background-color 0.3s ease;
+        }
+        .network-bar span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .network-bar strong {
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .stats-row { grid-template-columns: 1fr; }
+            .actions-row { grid-template-columns: 1fr; }
+            .dash-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toggle-container">
+        <button id="theme-toggle-btn" onclick="toggleTheme()">🌙 Dark</button>
+    </div>
+
+    <div class="dashboard">
+
+        <!-- Header -->
+        <div class="zg-card">
+            <div class="dash-header">
+                <div class="dash-header-left">
+                    <img class="og-logo" alt="0G Logo" style="height: 36px;" />
+                    <div>
+                        <h2 style="margin: 0; font-size: 1.2rem;">Node Dashboard</h2>
+                        <p style="margin: 4px 0 0 0; color: var(--text-muted); font-size: 0.8rem;">0x7a3B...f92E</p>
+                    </div>
+                </div>
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    Online
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value">1,247</div>
+                <div class="stat-label">Inferences</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">48.2</div>
+                <div class="stat-label">TFLOPS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">312.5</div>
+                <div class="stat-label">0G Earned</div>
+            </div>
+        </div>
+
+        <!-- Network Info -->
+        <div class="network-bar">
+            <span>Block: <strong>#4,891,203</strong></span>
+            <span>Epoch: <strong>147</strong></span>
+            <span>Peers: <strong>64</strong></span>
+            <span>Latency: <strong>12ms</strong></span>
+        </div>
+
+        <!-- Transactions -->
+        <div class="zg-card">
+            <p class="section-title" style="margin-bottom: 12px;">Recent Transactions</p>
+            <div class="tx-table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tx Hash</th>
+                            <th>Type</th>
+                            <th>Time</th>
+                            <th style="text-align: right;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="tx-hash">0x8f3a...c21d</td>
+                            <td><span class="tx-type reward">Reward</span></td>
+                            <td class="tx-time">2 min ago</td>
+                            <td class="tx-amount positive">+4.20 0G</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-hash">0x1b7e...a904</td>
+                            <td><span class="tx-type inference">Inference</span></td>
+                            <td class="tx-time">8 min ago</td>
+                            <td class="tx-amount positive">+0.85 0G</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-hash">0xd4c2...7f38</td>
+                            <td><span class="tx-type stake">Stake</span></td>
+                            <td class="tx-time">23 min ago</td>
+                            <td class="tx-amount negative">−500.00 0G</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-hash">0x92af...e1b6</td>
+                            <td><span class="tx-type reward">Reward</span></td>
+                            <td class="tx-time">1 hr ago</td>
+                            <td class="tx-amount positive">+12.30 0G</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-hash">0x56d1...3ca9</td>
+                            <td><span class="tx-type inference">Inference</span></td>
+                            <td class="tx-time">1 hr ago</td>
+                            <td class="tx-amount positive">+0.92 0G</td>
+                        </tr>
+                        <tr>
+                            <td class="tx-hash">0xe7b3...48f2</td>
+                            <td><span class="tx-type inference">Inference</span></td>
+                            <td class="tx-time">2 hrs ago</td>
+                            <td class="tx-amount positive">+1.10 0G</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-row">
+            <button>Claim Rewards</button>
+            <button>Stake 0G</button>
+            <button>Unstake</button>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById('theme-toggle-btn');
+
+            let currentTheme = html.getAttribute('data-0g-theme');
+            if (!currentTheme) {
+                currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-0g-theme', newTheme);
+            btn.innerText = newTheme === 'light' ? '🌙 Dark' : '☀️ Light';
+        }
+    </script>
+
+</body>
+</html>

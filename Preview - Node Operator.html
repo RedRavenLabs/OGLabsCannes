@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>0G Neumorphic UI Preview - Styler7</title>
+    
+    <script src="https://cdn.jsdelivr.net/gh/RedRavenLabs/OGLabsCannes@main/styler7.js"></script>
+    
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        .toggle-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .zg-card {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 340px;
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toggle-container">
+        <button id="theme-toggle-btn" onclick="toggleTheme()">🌙 Switch to Dark Mode</button>
+    </div>
+
+    <div class="zg-card">
+        
+        <img class="og-logo" alt="0G Logo" style="height: 48px; margin: 0 auto;" />
+        
+        <div>
+            <h2 style="margin: 0 0 8px 0;">Node Operator</h2>
+            <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">Configure your 0G AI inference node.</p>
+        </div>
+        
+        <div class="input-group">
+            <label>Wallet Address</label>
+            <input type="text" placeholder="0x..." />
+        </div>
+
+        <div class="input-group">
+            <label>Compute Power</label>
+            <input type="text" placeholder="Enter TFLOPS..." />
+        </div>
+        
+        <button>Initialize Node</button>
+        
+        <code style="padding: 12px; border-radius: 8px; font-size: 0.85rem; box-shadow: var(--shadow-pressed);">
+            Status: Awaiting connection...
+        </code>
+
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById('theme-toggle-btn');
+            
+            let currentTheme = html.getAttribute('data-0g-theme');
+            if (!currentTheme) {
+                currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-0g-theme', newTheme);
+            btn.innerText = newTheme === 'light' ? '🌙 Switch to Dark Mode' : '☀️ Switch to Light Mode';
+        }
+    </script>
+
+</body>
+</html>
