@@ -20,4 +20,4 @@ Built for the [Zero Gravity (0G)](https://0g.ai/) ecosystem, this toolkit inject
 To apply the 0G Neumorphic style to your project, simply add this single `<script>` tag inside the `<head>` of your HTML file:
 
 ```html
-<script src="[https://cdn.jsdelivr.net/gh/YRedRavenLabs/0g-ui-toolkit@main/styler.js](https://cdn.jsdelivr.net/gh/RedRavenLabs/0g-ui-toolkit@main/styler.js)"></script>
+<script src="[https://cdn.jsdelivr.net/gh/YRedRavenLabs/0g-ui-toolkit@main/styler.js](https://cdn.jsdelivr.net/gh/RedRavenLabs/0g-ui-toolkit@main/styler7.js)"></script>
