@@ -32,14 +32,14 @@
       --color-primary-light: #E3C1FF;
       
       /* Background & Text */
-      --bg-base: #E0E5EC;
+      --bg-base: #F0F4F8; /* Lighter off-white background */
       --text-main: #1A1A1A; /* High contrast text */
       --text-muted: #5A6A7A;
       
       /* Neumorphic Shadows - Light Mode */
-      --shadow-flat: 9px 9px 16px rgba(163, 177, 198, 0.6), -9px -9px 16px rgba(255, 255, 255, 0.6);
-      --shadow-pressed: inset 6px 6px 10px 0 rgba(163, 177, 198, 0.7), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.8);
-      --shadow-hover: 12px 12px 20px rgba(163, 177, 198, 0.7), -12px -12px 20px rgba(255, 255, 255, 0.8);
+      --shadow-flat: 9px 9px 16px rgba(163, 177, 198, 0.4), -9px -9px 16px rgba(255, 255, 255, 0.9);
+      --shadow-pressed: inset 6px 6px 10px 0 rgba(163, 177, 198, 0.5), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.9);
+      --shadow-hover: 12px 12px 20px rgba(163, 177, 198, 0.5), -12px -12px 20px rgba(255, 255, 255, 1);
     }
 
     [data-0g-theme="dark"] {
@@ -125,28 +125,10 @@
   // 4. Branding and Logo Swap Functionality
   window.init0GBranding = function(theme) {
     const logos = document.querySelectorAll('img.0g-logo');
-    const lightLogoSrc = 'https://raw.githubusercontent.com/RedRavenLabs/OGLabsCannes/43b77f8491f82cff98617ac5e748ad17ad781626/0G-Logo-Purple_Hero.svg';
-    const darkLogoSrc = 'https://raw.githubusercontent.com/RedRavenLabs/OGLabsCannes/43b77f8491f82cff98617ac5e748ad17ad781626/0G-Logo-Purple_Hero.svg';
+    
+    // Updated to use the main branch URL so it always points to the correct logo
+    const lightLogoSrc = 'https://raw.githubusercontent.com/RedRavenLabs/OGLabsCannes/main/0G-Logo-Purple_Hero.svg';
+    const darkLogoSrc = 'https://raw.githubusercontent.com/RedRavenLabs/OGLabsCannes/main/0G-Logo-Purple_Hero.svg';
     
     logos.forEach(logo => {
-      logo.src = theme === 'dark' ? darkLogoSrc : lightLogoSrc;
-    });
-  };
-
-  const updateTheme = (e) => {
-    const isDark = e.matches;
-    const currentTheme = isDark ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-0g-theme', currentTheme);
-    
-    // Automatically swap logos whenever the theme changes
-    if (typeof window.init0GBranding === 'function') {
-      window.init0GBranding(currentTheme);
-    }
-  };
-
-  // Set the initial theme based on system preference
-  updateTheme(mediaQuery);
-
-  // Listen for changes in system preference
-  mediaQuery.addEventListener('change', updateTheme);
-})();
+      // Ensure the logo sets its source dynamically based
