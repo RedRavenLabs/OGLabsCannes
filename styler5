@@ -1,0 +1,34 @@
+(function() {
+  const style = document.createElement('style');
+  style.id = '0g-ui-toolkit-styles';
+  style.textContent = `
+    @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap');
+    
+    @font-face { font-family: 'Regola Pro'; src: url('') format('woff2'); font-weight: 400; font-style: normal; }
+    @font-face { font-family: 'Regola Pro'; src: url('') format('woff2'); font-weight: 700; font-style: normal; }
+
+    :root, [data-0g-theme="light"] {
+      --font-primary: 'Regola Pro', sans-serif;
+      --font-code: 'Geist Mono', monospace;
+      --color-primary: #9200E1;
+      --color-primary-light: #E3C1FF;
+      --bg-base: #F0F4F8;
+      --text-main: #1A1A1A;
+      --text-muted: #5A6A7A;
+      --shadow-flat: 9px 9px 16px rgba(163, 177, 198, 0.4), -9px -9px 16px rgba(255, 255, 255, 0.9);
+      --shadow-pressed: inset 6px 6px 10px 0 rgba(163, 177, 198, 0.5), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    [data-0g-theme="dark"] {
+      --bg-base: #1A1A1A;
+      --text-main: #F8F8F8;
+      --text-muted: #A1A1A1;
+      --shadow-flat: 9px 9px 16px rgba(13, 13, 13, 0.8), -9px -9px 16px rgba(39, 39, 39, 0.8);
+      --shadow-pressed: inset 6px 6px 10px 0 rgba(13, 13, 13, 0.8), inset -6px -6px 10px 0 rgba(39, 39, 39, 0.8);
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
