@@ -131,4 +131,36 @@
     const darkLogoSrc = 'https://raw.githubusercontent.com/RedRavenLabs/OGLabsCannes/main/0G-Logo-Purple_Hero.svg';
     
     logos.forEach(logo => {
-      // Ensure the logo sets its source dynamically based
+      // Ensure the logo sets its source dynamically based on the current theme
+      logo.src = theme === 'dark' ? darkLogoSrc : lightLogoSrc;
+    });
+  };
+
+  const updateTheme = (e) => {
+    // Determine the theme based on the media query match
+    const isDark = typeof e.matches !== 'undefined' ? e.matches : mediaQuery.matches;
+    const currentTheme = isDark ? 'dark' : 'light';
+    
+    // Set the theme attribute on the HTML tag
+    document.documentElement.setAttribute('data-0g-theme', currentTheme);
+    
+    // Check if the DOM is already loaded; if so, swap logos immediately
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        if (typeof window.init0GBranding === 'function') {
+          window.init0GBranding(currentTheme);
+        }
+      });
+    } else {
+      if (typeof window.init0GBranding === 'function') {
+        window.init0GBranding(currentTheme);
+      }
+    }
+  };
+
+  // Set the initial theme based on system preference
+  updateTheme(mediaQuery);
+
+  // Listen for changes in system preference (user toggles dark/light mode)
+  mediaQuery.addEventListener('change', updateTheme);
+})();
