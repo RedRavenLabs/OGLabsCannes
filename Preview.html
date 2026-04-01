@@ -143,7 +143,7 @@
     </div>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="showPreview('form', this)">Form</button>
+        <button class="tab-btn active" onclick="showPreview('node', this)">Node Operator</button>
         <button class="tab-btn" onclick="showPreview('dashboard', this)">Dashboard</button>
         <button class="tab-btn" onclick="showPreview('wallet', this)">Wallet</button>
     </div>
@@ -154,9 +154,9 @@
                 <div class="frame-dot red"></div>
                 <div class="frame-dot yellow"></div>
                 <div class="frame-dot green"></div>
-                <span class="frame-label" id="frame-filename">Test7.html</span>
+                <span class="frame-label" id="frame-filename">Preview - Node Operator.html</span>
             </div>
-            <iframe id="preview-iframe" src="Test7.html"></iframe>
+            <iframe id="preview-iframe" src="Preview%20-%20Node%20Operator.html"></iframe>
         </div>
     </div>
 
@@ -165,16 +165,16 @@
     </div>
 
     <script>
-        const previews = {
-            form:      'Test7.html',
-            dashboard: 'Test7-Dashboard.html',
-            wallet:    'Test7-Wallet.html'
+        var previews = {
+            node:      { src: 'Preview%20-%20Node%20Operator.html', label: 'Preview - Node Operator.html' },
+            dashboard: { src: 'Preview-Dashboard.html',             label: 'Preview-Dashboard.html' },
+            wallet:    { src: 'Preview-Wallet.html',                label: 'Preview-Wallet.html' }
         };
 
         function showPreview(key, btn) {
             var iframe = document.getElementById('preview-iframe');
-            iframe.src = previews[key];
-            document.getElementById('frame-filename').textContent = previews[key];
+            iframe.src = previews[key].src;
+            document.getElementById('frame-filename').textContent = previews[key].label;
 
             document.querySelectorAll('.tab-btn').forEach(function(b) {
                 b.classList.remove('active');
