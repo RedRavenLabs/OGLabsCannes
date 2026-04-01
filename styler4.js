@@ -83,9 +83,11 @@
   `;
   document.head.appendChild(style);
 
-  // The definitive PNG link using GitHub's raw content server
   window.init0GBranding = function(theme) {
-    const logos = document.querySelectorAll('img.0g-logo');
+    // UPDATED: Now looks for 'og-logo' instead of '0g-logo'
+    const logos = document.querySelectorAll('img.og-logo'); 
+    
+    // UPDATED: Clean URL with no backslashes
     const logoSrc = 'https://raw.githubusercontent.com/RedRavenLabs/OGLabsCannes/main/0G-Logo-Purple_Hero.png';
     
     logos.forEach(logo => {
